@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import './App.css'
+import '@fontsource/inter';
+
+import {CssVarsProvider} from '@mui/joy/styles';
+import CssBaseline from '@mui/joy/CssBaseline';
+import Box from '@mui/joy/Box';
+import {CubesInput} from "./features/CubeCalculator/CubesInput";
+import {DataProvider} from "./features/CubeCalculator/DataProvider";
+import {AttackDiceInfo} from "./features/CubeCalculator/AttackDiceInfo";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <CssVarsProvider>
+      <CssBaseline/>
+      <DataProvider>
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: 500,
+            display: 'grid',
+            gap: 2,
+            padding: 2
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <CubesInput/>
+          <AttackDiceInfo />
+        </Box>
+      </DataProvider>
+    </CssVarsProvider>
   );
 }
 
