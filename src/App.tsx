@@ -1,19 +1,19 @@
-import React from 'react';
+import React from 'react'
 
 import './App.css'
-import '@fontsource/inter';
+import '@fontsource/inter'
 
-import {CssVarsProvider} from '@mui/joy/styles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import Box from '@mui/joy/Box';
-import {CubesInput} from "./features/CubeCalculator/CubesInput";
-import {DataProvider} from "./features/CubeCalculator/DataProvider";
-import {AttackDiceInfo} from "./features/CubeCalculator/AttackDiceInfo";
+import { CssVarsProvider } from '@mui/joy/styles'
+import CssBaseline from '@mui/joy/CssBaseline'
+import Box from '@mui/joy/Box'
+import { CubesInput } from './features/CubeCalculator/CubesInput'
+import { DataProvider } from './features/CubeCalculator/DataProvider'
+import { AttackDiceInfo } from './features/CubeCalculator/AttackDiceInfo'
 
 function App() {
   return (
     <CssVarsProvider>
-      <CssBaseline/>
+      <CssBaseline />
       <DataProvider>
         <Box
           sx={{
@@ -24,12 +24,12 @@ function App() {
             padding: 2
           }}
         >
-          <CubesInput/>
+          <CubesInput />
           <AttackDiceInfo />
         </Box>
       </DataProvider>
     </CssVarsProvider>
-  );
+  )
 }
 
-export default App;
+export default App

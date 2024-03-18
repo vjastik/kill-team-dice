@@ -12,37 +12,46 @@ export const SP: { [key in SpecialRulesType]: string } = {
 export type SpecialRulesType = 'ap' | 'balanced' | 'ceaseless' | 'lethal' | 'mw' | 'p' | 'relentless' | 'rending'
 
 export type ShootSpType = {
-  label: string,
-  value: SpecialRulesType,
+  label: string
+  value: SpecialRulesType
   withX?: boolean
 }
 
-export const SHOOT_SP: ShootSpType[] = [{
-  label: SP.ap,
-  value: 'ap',
-  withX: true
-}, {
-  label: SP.balanced,
-  value: 'balanced'
-}, {
-  label: SP.ceaseless,
-  value: 'ceaseless'
-}, {
-  label: SP.lethal,
-  value: 'lethal',
-  withX: true
-}, {
-  label: SP.mw,
-  value: 'mw',
-  withX: true
-}, {
-  label: SP.p,
-  value: 'p',
-  withX: true
-}, {
-  label: SP.relentless,
-  value: 'relentless'
-}, {
-  label: SP.rending,
-  value: 'rending'
-}]
+export const SHOOT_SP: ShootSpType[] = [
+  {
+    label: SP.ap,
+    value: 'ap',
+    withX: true
+  },
+  {
+    label: SP.balanced,
+    value: 'balanced'
+  },
+  {
+    label: SP.ceaseless,
+    value: 'ceaseless'
+  },
+  {
+    label: SP.lethal,
+    value: 'lethal',
+    withX: true
+  },
+  {
+    label: SP.mw,
+    value: 'mw',
+    withX: true
+  },
+  {
+    label: SP.p,
+    value: 'p',
+    withX: true
+  },
+  {
+    label: SP.relentless,
+    value: 'relentless'
+  },
+  {
+    label: SP.rending,
+    value: 'rending'
+  }
+]

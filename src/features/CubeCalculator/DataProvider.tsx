@@ -1,7 +1,7 @@
 import React from 'react'
-import {SpecialRulesType} from "../../constants/specialRules";
+import { SpecialRulesType } from '../../constants/specialRules'
 
-export type AttackSettingsType =  {
+export type AttackSettingsType = {
   diceCount: number
   skillValue: number
   normalDamage: number
@@ -10,8 +10,8 @@ export type AttackSettingsType =  {
 }
 
 export type SpecialRuleItemType = {
-  label: string,
-  value: SpecialRulesType,
+  label: string
+  value: SpecialRulesType
   xValue?: number
 }
 
@@ -47,9 +47,5 @@ export const DataProvider: React.FC<React.PropsWithChildren> = props => {
     })
   }
 
-  return (
-    <DataContext.Provider value={{ attack, changeAttackSettings }}>
-      {props.children}
-    </DataContext.Provider>
-  )
+  return <DataContext.Provider value={{ attack, changeAttackSettings }}>{props.children}</DataContext.Provider>
 }

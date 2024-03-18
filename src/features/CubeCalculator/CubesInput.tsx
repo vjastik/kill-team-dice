@@ -1,14 +1,14 @@
-import React from "react";
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import Typography from '@mui/joy/Typography';
-import Button from '@mui/joy/Button';
-import Box from "@mui/joy/Box";
-import {AttackSettingsType, DataContext} from "./DataProvider";
-import Divider from '@mui/joy/Divider';
-import {SpecialRulesPicker} from "./SpecialRulesPicker";
-import Chip from '@mui/joy/Chip';
-import {SP} from "../../constants/specialRules";
+import React from 'react'
+import Card from '@mui/joy/Card'
+import CardContent from '@mui/joy/CardContent'
+import Typography from '@mui/joy/Typography'
+import Button from '@mui/joy/Button'
+import Box from '@mui/joy/Box'
+import { AttackSettingsType, DataContext } from './DataProvider'
+import Divider from '@mui/joy/Divider'
+import { SpecialRulesPicker } from './SpecialRulesPicker'
+import Chip from '@mui/joy/Chip'
+import { SP } from '../../constants/specialRules'
 
 const inputBoxSx = {
   display: 'grid',
@@ -26,13 +26,7 @@ const settingsBoxSx = {
 
 export const CubesInput = () => {
   const {
-    attack: {
-      diceCount,
-      skillValue,
-      normalDamage,
-      criticalDamage,
-      specialRules
-    },
+    attack: { diceCount, skillValue, normalDamage, criticalDamage, specialRules },
     attack,
     changeAttackSettings
   } = React.useContext(DataContext)
@@ -41,13 +35,13 @@ export const CubesInput = () => {
 
   const handleChangeCubes = (name: keyof Omit<AttackSettingsType, 'specialRules'>, modifier: number) => () => {
     if (attack[name] + modifier < 0) return
-    if (name === 'skillValue' && attack[name] + modifier > 6) return;
+    if (name === 'skillValue' && attack[name] + modifier > 6) return
 
     changeAttackSettings(name, attack[name] + modifier)
   }
 
   const successPercentage = React.useMemo(() => {
-    return Math.round((7 - skillValue) * 1000 / 6) / 10
+    return Math.round(((7 - skillValue) * 1000) / 6) / 10
   }, [skillValue])
 
   const getColor = (percents: number) => {
@@ -60,15 +54,19 @@ export const CubesInput = () => {
   return (
     <Card variant="soft">
       <CardContent>
-        <Box sx={{
-          display: 'flex',
-          justifyContent: 'space-between'
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+        >
           <div>
             <Typography level="title-lg">Dice input</Typography>
             <Typography>Add you attack dice characteristics</Typography>
           </div>
-          <Typography sx={{color: getColor(successPercentage)}} level="title-lg">{successPercentage}%</Typography>
+          <Typography sx={{ color: getColor(successPercentage) }} level="title-lg">
+            {successPercentage}%
+          </Typography>
         </Box>
 
         <Box sx={settingsBoxSx}>
@@ -87,7 +85,7 @@ export const CubesInput = () => {
           </Box>
         </Box>
 
-        <Divider/>
+        <Divider />
 
         <Box sx={settingsBoxSx}>
           <Box sx={inputBoxSx}>
@@ -104,21 +102,19 @@ export const CubesInput = () => {
           </Box>
         </Box>
 
-        <Divider/>
+        <Divider />
 
         <Box sx={settingsBoxSx}>
           <Button onClick={() => setOpen(true)}>Manage Special Rules</Button>
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', paddingTop: 1}}>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', paddingTop: 1 }}>
             {specialRules.map(item => {
               const plus = item.label === SP.lethal ? '+' : ''
               const xValue = item.xValue ? `: ${item.xValue}${plus}` : ''
 
               return (
-                <Chip
-                  key={`chip-sp-${item.value}`}
-                  color="neutral"
-                  variant="outlined">
-                  {item.label}{xValue}
+                <Chip key={`chip-sp-${item.value}`} color="neutral" variant="outlined">
+                  {item.label}
+                  {xValue}
                 </Chip>
               )
             })}
@@ -126,7 +122,7 @@ export const CubesInput = () => {
         </Box>
       </CardContent>
 
-      <SpecialRulesPicker open={open} handleClose={() => setOpen(false)}/>
+      <SpecialRulesPicker open={open} handleClose={() => setOpen(false)} />
     </Card>
   )
 }
