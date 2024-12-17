@@ -24,7 +24,7 @@ const settingsBoxSx = {
   paddingBottom: 1
 }
 
-export const CubesInput = () => {
+export const AttackInput = () => {
   const {
     attack: { diceCount, skillValue, normalDamage, criticalDamage, specialRules },
     attack,
@@ -40,17 +40,6 @@ export const CubesInput = () => {
     changeAttackSettings(name, attack[name] + modifier)
   }
 
-  const successPercentage = React.useMemo(() => {
-    return Math.round(((7 - skillValue) * 1000) / 6) / 10
-  }, [skillValue])
-
-  const getColor = (percents: number) => {
-    if (percents > 80) return '#20b023'
-    if (percents < 20) return '#d72848'
-
-    return '#e5b407'
-  }
-
   return (
     <Card variant="soft">
       <CardContent>
@@ -61,17 +50,14 @@ export const CubesInput = () => {
           }}
         >
           <div>
-            <Typography level="title-lg">Dice input</Typography>
+            <Typography level="title-lg">Attack input</Typography>
             <Typography>Add you attack dice characteristics</Typography>
           </div>
-          <Typography sx={{ color: getColor(successPercentage) }} level="title-lg">
-            {successPercentage}%
-          </Typography>
         </Box>
 
         <Box sx={settingsBoxSx}>
           <Box sx={inputBoxSx}>
-            <Typography>Cubes:</Typography>
+            <Typography>Dice count:</Typography>
             <Button onClick={handleChangeCubes('diceCount', -1)}>-1</Button>
             <Typography textAlign="center">{diceCount}</Typography>
             <Button onClick={handleChangeCubes('diceCount', 1)}>+1</Button>

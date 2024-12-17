@@ -6,9 +6,10 @@ import '@fontsource/inter'
 import { CssVarsProvider } from '@mui/joy/styles'
 import CssBaseline from '@mui/joy/CssBaseline'
 import Box from '@mui/joy/Box'
-import { CubesInput } from './features/CubeCalculator/CubesInput'
+import { AttackInput } from './features/CubeCalculator/AttackInput'
 import { DataProvider } from './features/CubeCalculator/DataProvider'
 import { AttackDiceInfo } from './features/CubeCalculator/AttackDiceInfo'
+import { DefenceInput } from './features/CubeCalculator/DefenceInput'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <DataProvider>
         <Box
           sx={{
+            margin: 'auto',
             width: '100%',
             maxWidth: 500,
             display: 'grid',
@@ -24,8 +26,9 @@ function App() {
             padding: 2
           }}
         >
-          <CubesInput />
+          <AttackInput />
           <AttackDiceInfo />
+          <DefenceInput />
         </Box>
       </DataProvider>
     </CssVarsProvider>

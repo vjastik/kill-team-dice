@@ -13,9 +13,14 @@ export const generateDiceRolls = (
 ): number => {
   const getSP = getSpecialRule(specialRules)
 
-  const rolls: number[][] = []
+  let rolls: number[][] = []
   const diceDamageMap = [0, 0, 0, 0, 0, 0]
-  const withCeaseless = getSP('ceaseless')
+  const rendingReRolledDamagePerDice = ((7 - skillValue) * criticalDamage) / 6
+
+  const ceaselessRule = getSP('ceaseless')
+  const balancedRule = getSP('balanced')
+  const rendingRule = getSP('rending')
+  const relentlessRule = getSP('relentless')
 
   diceDamageMap.forEach((item, index) => {
     const slotCount = index + 1
@@ -42,26 +47,51 @@ export const generateDiceRolls = (
   generateRollHelper(new Array(diceCount).fill(0), 0)
 
   rolls.forEach((throwResults, index) => {
-    const roll = throwResults.map(item => diceDamageMap[item])
+    // Rending rule can change result
+    let diceResults = throwResults
+    let roll = diceResults.map(item => diceDamageMap[item])
 
     // Find dice with result of 1 (index: 0)
-    const diceResultOfOne = throwResults.reduce((result, current, currentIndex) => {
+    const diceResultOfOne = diceResults.reduce((result, current, currentIndex) => {
       if (current !== 0) return result
       return [...result, currentIndex]
     }, [] as number[])
 
-    if (withCeaseless && !isEmpty(diceResultOfOne)) {
+    // Ceaseless Rule extension
+    if (ceaselessRule && !isEmpty(diceResultOfOne)) {
       diceResultOfOne.forEach(index => roll[index] = damagePerDice)
     }
 
-    const dieReRoll = throwResults.findIndex((item, index) => {
-      if (withCeaseless && diceResultOfOne.some(dieIndex => dieIndex === index)) return false
+    // Balanced Rule extension
+    if (balancedRule) {
+      const dieReRoll = diceResults.findIndex((item, index) => {
+        if (ceaselessRule && diceResultOfOne.some(dieIndex => dieIndex === index)) return false
 
-      if (roll[index] > 0 && diceDamageMap[item] === 0) debugger
-      return diceDamageMap[item] === 0
-    })
-    if (dieReRoll !== -1) {
-      roll[dieReRoll] = damagePerDice
+        return diceDamageMap[item] === 0
+      })
+      if (dieReRoll !== -1) {
+        roll[dieReRoll] = damagePerDice
+      }
+    }
+
+    // Relentless Rule extension
+    if (relentlessRule) {
+      roll = roll.map(item => item === 0 ? damagePerDice : item)
+    }
+
+    // Rending rule extension
+    if (rendingRule && diceResults.some(item => (item + 1) >= criticalSkillValue)) {
+      const indexOfNormalHit = roll.findIndex(item => item === normalDamage)
+      const indexOfNormalReRolledHit = roll.findIndex(item => item === damagePerDice)
+
+      if (indexOfNormalHit !== -1) {
+        diceResults[indexOfNormalHit] = 5
+        roll[indexOfNormalHit] = criticalDamage
+      } else if (indexOfNormalReRolledHit !== -1) {
+
+        diceResults[indexOfNormalReRolledHit] = 5
+        roll[indexOfNormalReRolledHit] = rendingReRolledDamagePerDice
+      }
     }
 
     rolls[index] = roll
@@ -70,4 +100,22 @@ export const generateDiceRolls = (
   const damagePossibilities = rolls.map(item => sum(item))
 
   return sum(damagePossibilities) / damagePossibilities.length
+}
+
+export const calculateSuccessfulThrowPercentage = (
+  diceCount: number,
+  skillValue: number,
+  specialRules: SpecialRuleItemType[]
+): number => {
+  const damage = generateDiceRolls(
+    diceCount,
+    skillValue,
+    6, // criticalSkillValue is not needed for this calculation
+    1, // normalDamage is not needed for this calculation
+    1, // criticalDamage is not needed for this calculation
+    1, // damagePerDice is not needed for this calculation
+    specialRules
+  )
+
+  return Math.round(damage / diceCount * 10000) / 100
 }

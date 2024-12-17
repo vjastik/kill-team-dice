@@ -9,6 +9,12 @@ export type AttackSettingsType = {
   specialRules: SpecialRuleItemType[]
 }
 
+export type DefenderSettingsType = {
+  diceCount: number
+  saveValue: number
+  wounds: number
+}
+
 export type SpecialRuleItemType = {
   label: string
   value: SpecialRulesType
@@ -17,7 +23,9 @@ export type SpecialRuleItemType = {
 
 type DataContextType = {
   attack: AttackSettingsType
+  defence: DefenderSettingsType
   changeAttackSettings: (name: keyof AttackSettingsType, value: SpecialRuleItemType[] | number) => void
+  changeDefenceSettings: (name: keyof DefenderSettingsType, value: number) => void
 }
 
 export const DataContext = React.createContext<DataContextType>({
@@ -28,7 +36,13 @@ export const DataContext = React.createContext<DataContextType>({
     criticalDamage: 4,
     specialRules: []
   },
-  changeAttackSettings: () => {}
+  defence: {
+    diceCount: 3,
+    saveValue: 4,
+    wounds: 8
+  },
+  changeAttackSettings: () => {},
+  changeDefenceSettings: () => {}
 })
 
 export const DataProvider: React.FC<React.PropsWithChildren> = props => {
@@ -39,6 +53,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = props => {
     criticalDamage: 4,
     specialRules: []
   })
+  const [defence, setDefenceSettings] = React.useState<DefenderSettingsType>({
+    diceCount: 3,
+    saveValue: 4,
+    wounds: 8
+  })
 
   const changeAttackSettings = (name: keyof AttackSettingsType, value: number | SpecialRuleItemType[]) => {
     setAttackSettings({
@@ -47,5 +66,12 @@ export const DataProvider: React.FC<React.PropsWithChildren> = props => {
     })
   }
 
-  return <DataContext.Provider value={{ attack, changeAttackSettings }}>{props.children}</DataContext.Provider>
+  const changeDefenceSettings = (name: keyof DefenderSettingsType, value: number) => {
+    setDefenceSettings({
+      ...defence,
+      [name]: value
+    })
+  }
+
+  return <DataContext.Provider value={{ attack, defence, changeAttackSettings, changeDefenceSettings }}>{props.children}</DataContext.Provider>
 }

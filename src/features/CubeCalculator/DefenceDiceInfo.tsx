@@ -6,7 +6,6 @@ import DiceIcon from '@mui/icons-material/Casino'
 import Box from '@mui/joy/Box'
 import Typography from '@mui/joy/Typography'
 import { calculateDamage } from '../../utils/damage'
-import { calculateSuccessfulThrowPercentage } from '../../utils/dice'
 
 function calculateDiceCount(successOnNumber: number, totalDiceCount: number) {
   const successPercentage = ((7 - successOnNumber) * 100) / 6
@@ -15,36 +14,29 @@ function calculateDiceCount(successOnNumber: number, totalDiceCount: number) {
   return Math.round(expectedSuccessCount)
 }
 
-export const AttackDiceInfo = () => {
+export const DefenceDiceInfo = () => {
   const {
-    attack: { diceCount, skillValue, normalDamage, criticalDamage, specialRules }
+    attack: { diceCount, skillValue, normalDamage, criticalDamage, specialRules },
+    defence: { diceCount: defenceDiceCount, saveValue, wounds }
   } = React.useContext(DataContext)
 
-  const successfulDiceCount = React.useMemo(() => calculateDiceCount(skillValue, diceCount), [skillValue, diceCount])
+  const successfulDiceCount = React.useMemo(() => calculateDiceCount(saveValue, defenceDiceCount), [saveValue, defenceDiceCount])
   const damage = React.useMemo(
-    () => calculateDamage(diceCount, skillValue, normalDamage, criticalDamage, specialRules),
+    () => {
+      const damage = calculateDamage(diceCount, skillValue, normalDamage, criticalDamage, specialRules)
+      const save = (7 - saveValue) / 6
+
+      return damage - save
+    },
     [diceCount, skillValue, normalDamage, criticalDamage, specialRules]
   )
-
-  const success = React.useMemo(
-    () => calculateSuccessfulThrowPercentage(diceCount, skillValue, specialRules),
-    [diceCount, skillValue, specialRules]
-  )
-
-  const getColor = (percents: number) => {
-    if (percents > 80) return '#20b023'
-    if (percents < 20) return '#d72848'
-
-    return '#e5b407'
-  }
 
   return (
     <Card variant='soft'>
       <CardContent>
-        <Typography level='title-lg'>Raw info</Typography>
-
+        <Typography level='title-lg'>Defence info</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>Successful dice count:</Typography>
+          <Typography>Save dice count:</Typography>
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             {new Array(successfulDiceCount).fill(0).map((_val, index) => (
               <DiceIcon key={`dice-${index}`} />
@@ -53,12 +45,7 @@ export const AttackDiceInfo = () => {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>Success:</Typography>
-          <Typography sx={{ color: getColor(success)}}>{success}%</Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography>Damage:</Typography>
+          <Typography>Damage after saves:</Typography>
           <Typography>{damage} wounds</Typography>
         </Box>
       </CardContent>
